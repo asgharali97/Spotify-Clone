@@ -1,67 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import IconText from "./Share/IconText";
 import HoverText from "./Share/HoverText";
-import { Link } from "react-router-dom";
-import { ViewPlaylist } from "./Share/Card";
+import { Link,useNavigate } from "react-router-dom";
+import InputText from "./Share/InputText";
+import CloudinaryUpload from "./Share/CloudinaryUpload";
+import {AutenticatedPostRequest} from '../Utils/ServerHelper'
+const UploadSongs = () => {
+  const [name, setName] = useState("");
+  const [thumbnail, setThumbnail] = useState("");
+  const [playlistUrl, setPlaylistUrl] = useState("");
+  const [uploadedSongName, setUploadedSongName] = useState("");
+  const navigate = useNavigate();
 
-const focusCardData = [
-  {
-    title: "Arjit Singh sad  songs",
-    description: "Arjit Singh top hits",
-    imgUrl: "https://i.scdn.co/image/ab67706c0000da84b8ebec0762ac9c76adb09347",
-  },
-  {
-    title: "World Of Walker",
-    description: "Alan Walker top hits",
-    imgUrl: "https://i.scdn.co/image/ab67616d00001e02c4d00cac55ae1b4598c9bc90",
-  },
-  {
-    title: "Alone faded",
-    description: "Alone in faded",
-    imgUrl: "https://i.scdn.co/image/ab67616d00001e02df9a35baaa98675256b35177",
-  },
-  {
-    title: "Mix faded",
-    description: "Best of alan walker!",
-    imgUrl:
-      "https://seeded-session-images.scdn.co/v2/img/122/secondary/artist/4YRxDV8wJFPHPTeXepOstw/en-GB",
-  },
-  {
-    title: "On My Way",
-    description: "Way is going on lets come",
-    imgUrl: "https://i.scdn.co/image/ab67706f000000023ec51dd9c17a9add42c2e249",
-  },
-];
+  const songSubmit =async()=>{
+     const data = {name,thumbnail,track:playlistUrl}
+     const response = await AutenticatedPostRequest("/api/song/create",data)
+     console.log(response)
+     alert("Song Uploaded")
+     navigate("/")
+  }
 
-const SpotifyCardData = [
-  {
-    title: " Singh   songs",
-    description: " Singh top hits",
-    imgUrl: "https://i.scdn.co/image/ab67706c0000da84b8ebec0762ac9c76adb09347",
-  },
-  {
-    title: "Walker",
-    description: " Walker top hits",
-    imgUrl: "https://i.scdn.co/image/ab67616d00001e02c4d00cac55ae1b4598c9bc90",
-  },
-  {
-    title: "Alone faded",
-    description: " faded",
-    imgUrl: "https://i.scdn.co/image/ab67616d00001e02df9a35baaa98675256b35177",
-  },
-  {
-    title: "Mix ",
-    description: "Best of alan !",
-    imgUrl:
-      "https://seeded-session-images.scdn.co/v2/img/122/secondary/artist/4YRxDV8wJFPHPTeXepOstw/en-GB",
-  },
-  {
-    title: " My Way",
-    description: "Way is going on ",
-    imgUrl: "https://i.scdn.co/image/ab67706f000000023ec51dd9c17a9add42c2e249",
-  },
-];
-const Home = () => {
+
   return (
     <>
       <div style={{ height: "100vh" }} className="h-full w-full flex bg-black">
@@ -105,15 +64,8 @@ const Home = () => {
                 iconName={"clarity:heart-solid"}
                 displayText={"Liked Songs"}
               />
+              <IconText iconName={"entypo:music"} displayText={"My Music"} />
             </div>
-            {/* <div className="text-white border border-gray rounded-full w-2/4 h-10 flex items-center ">
-              <div className="flex items-center justify-start">
-                <div className="px-2 flex">
-                  <Icon icon={"jam:world"} color={"white"} fontSize={24} />
-                  <div className="ml-4 font-semibold">English</div>
-                </div>
-              </div>
-            </div> */}
           </div>
         </div>
         {/* This is right side */}
@@ -127,22 +79,51 @@ const Home = () => {
                 <div className="h-1/2 border-r  border-white"></div>
               </div>
               <div className="w-2/5 h-full items-center flex justify-around">
-                <Link to="/Signup">
-                  <HoverText displayText={"Sign Up"} />
+                <Link to="/">
+                  <HoverText displayText={"Upload Song"} />
                 </Link>
-                <div className="bg-white h-48 w-6 flex items-center justify-center rounded-full font-semibold cursor-pointer hover:scale-110">
-                  <Link to="/Login">Log In</Link>
+                <div className="bg-white h-48 w-11 flex items-center justify-center rounded-full font-semibold cursor-pointer hover:scale-110">
+                  <Link to="">FS</Link>
                 </div>
               </div>
             </div>
           </div>
-          <div className="py-2">
-            <div className="px-6 ">
-              <ViewPlaylist textTitle={"Focus"} cardData={focusCardData} />
-              <ViewPlaylist
-                textTitle={"Spotify Playlist"}
-                cardData={SpotifyCardData}
+          <div className="text-white p-5 font-bold text-2xl">
+            Upload Your Music
+          </div>
+          <div className="ml-5 mt-2 text-white w-2/3 space-x-8 flex items-center justify-center">
+            <InputText
+              label={"Add Name"}
+              placeholder={"Song Name"}
+              value={name}
+              setValue={setName}
+            />
+            <InputText
+              label={"Add Thumbnail"}
+              placeholder={"Thumbnail"}
+              value={thumbnail}
+              setValue={setThumbnail}
+            />
+          </div>
+          <div className="py-2 px-5">
+            {uploadedSongName ? (
+              <div className="bg-white text-black rounded-full p-3 font-semibold w-1/3">
+                {uploadedSongName.substring(0, 33)}...
+              </div>
+            ) : (
+              <CloudinaryUpload
+                setUrl={setPlaylistUrl}
+                setName={setUploadedSongName}
               />
+            )}
+            <div
+              className="bg-white text-black rounded-full mt-4 p-3 font-semibold cursor-pointer w-12 flex items-center justify-center"
+              onClick={(e) => {
+                e.preventDefault(e);
+                songSubmit();
+              }}
+            >
+              Submit Song
             </div>
           </div>
         </div>
@@ -151,4 +132,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default UploadSongs;

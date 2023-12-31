@@ -61,7 +61,7 @@ const SpotifyCardData = [
     imgUrl: "https://i.scdn.co/image/ab67706f000000023ec51dd9c17a9add42c2e249",
   },
 ];
-const Home = () => {
+const LogedHome = () => {
   return (
     <>
       <div style={{ height: "100vh" }} className="h-full w-full flex bg-black">
@@ -105,15 +105,11 @@ const Home = () => {
                 iconName={"clarity:heart-solid"}
                 displayText={"Liked Songs"}
               />
+              <IconText
+                iconName={"entypo:music"}
+                displayText={"My Music"}
+              />
             </div>
-            {/* <div className="text-white border border-gray rounded-full w-2/4 h-10 flex items-center ">
-              <div className="flex items-center justify-start">
-                <div className="px-2 flex">
-                  <Icon icon={"jam:world"} color={"white"} fontSize={24} />
-                  <div className="ml-4 font-semibold">English</div>
-                </div>
-              </div>
-            </div> */}
           </div>
         </div>
         {/* This is right side */}
@@ -127,11 +123,11 @@ const Home = () => {
                 <div className="h-1/2 border-r  border-white"></div>
               </div>
               <div className="w-2/5 h-full items-center flex justify-around">
-                <Link to="/Signup">
-                  <HoverText displayText={"Sign Up"} />
+                <Link to="/UploadSongs">
+                  <HoverText displayText={"Upload Song"} />
                 </Link>
-                <div className="bg-white h-48 w-6 flex items-center justify-center rounded-full font-semibold cursor-pointer hover:scale-110">
-                  <Link to="/Login">Log In</Link>
+                <div className="bg-white h-48 w-11 flex items-center justify-center rounded-full font-semibold cursor-pointer hover:scale-110">
+                  <Link to="/Login">FS</Link>
                 </div>
               </div>
             </div>
@@ -151,4 +147,5 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default LogedHome;
+

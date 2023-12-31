@@ -2,6 +2,7 @@ const express = require("express");
 const passport = require("passport");
 const connect = require("./db");
 const User = require("./models/User");
+const cors = require ("cors")
 const app = express();
 // const authRoutes = require("./routes/auth")
 require("dotenv").config();
@@ -31,6 +32,7 @@ passport.use(new JwtStrategy(opts, async (jwt_payload, done) => {
   }
 }));
 
+app.use(cors())
 app.use(express.json());
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/song", require("./routes/song"));
