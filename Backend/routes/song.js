@@ -22,13 +22,15 @@ router.post(
 // Router: 2 Get all  songs using GET
 router.get(
   "/get/mysongs",
-  passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", {session: false}),
   async (req, res) => {
-    const songs = songs.find({ artist: req.user._id });
-    return res.status(200).json({ data: songs });
+      const songs = await Song.find({artist: req.user._id}).populate(
+          "artist"
+      );
+      return res.status(200).json({data: songs});
   }
 );
-// Router:3 Get songss by artist using GET
+// Router:3 Get songs by artist using GET
 router.get(
   "/get/artist/:artistId",
   passport.authenticate("jwt", { session: false }),
@@ -38,7 +40,7 @@ router.get(
     if (!artist) {
       return res.status(301).json({ err: "Artist does not exists" });
     }
-    const songs = await songs.find({ artist: artistId });
+    const songs = await Song.find({ artist: artistId });
     return res.status(200).json({ data: songs });
   }
 );
@@ -48,7 +50,7 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     const {songsName} = req.params
-    const songs = await songs.find({name: songsName})
+    const songs = await Song.find({name: songsName})
     return res.status(200).json({data:songs})
   }
 );

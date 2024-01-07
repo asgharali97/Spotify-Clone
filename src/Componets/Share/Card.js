@@ -13,7 +13,7 @@ const ViewPlaylist = ({ textTitle, cardData }) => {
                 description={item.description}
                 imgUrl={item.imgUrl}
               />
-            );
+            )
           })}
         </div>
       </div>

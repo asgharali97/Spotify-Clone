@@ -17,7 +17,7 @@ const Login = () => {
       const date = new Date();
       date.setDate(date.getDate() + 60)
       setCookie("token", token, {path:"/", expires:date})
-      navigate("/")
+      navigate("/Home")
       alert("Success");
     } else {
       alert("Failuer");
