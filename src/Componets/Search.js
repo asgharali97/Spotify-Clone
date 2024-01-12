@@ -1,13 +1,19 @@
 import React, { useState, useContext, useLayoutEffect, useRef } from "react";
-import IconText from "../Share/IconText";
-import HoverText from "../Share/HoverText";
+import IconText from "./Share/IconText";
+import HoverText from "./Share/HoverText";
 import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import { Howl, Howler } from "howler";
-import songContext from "../../Context/SongContext";
+import songContext from "../Context/SongContext";
+import { AuthenticatedGetRequest } from "../Utils/ServerHelper"
+import SingleSongCard from "./Share/SingleSongCard"
 
+// Todo Add searchBar in Navabar
 
-const LoggedInContanier = ({ children,screenActive }) => {
+const Search = () => {
+  const [isInputFocused, setIsInputFocused] = useState(false)
+  const [searchText, setSearchText] = useState("");
+  const [songData, setSongData] = useState([]);
   const {
     currentSong,
     setCurrentSong,
@@ -63,6 +69,14 @@ const LoggedInContanier = ({ children,screenActive }) => {
     }
   };
 
+  const searchSong = async () => {
+    // This function will call the search api
+    const response = await AuthenticatedGetRequest(
+      "/api/song/get/name/" + searchText
+    );
+    console.log(response)
+    setSongData(response.data);
+  };
   return (
     <>
       <div
@@ -83,14 +97,13 @@ const LoggedInContanier = ({ children,screenActive }) => {
                       iconName={"majesticons:home"}
                       displayText={"Home"}
                       className="mt-2 mb-2"
-                      active={screenActive === "home"}
                     />
                   </Link>
                   <Link to={"/Search"}>
                     <IconText
                       iconName={"iconoir:search"}
                       displayText={"Search"}
-                      active={screenActive === "search"}
+                      active
                     />
                   </Link>
                 </div>
@@ -112,7 +125,6 @@ const LoggedInContanier = ({ children,screenActive }) => {
                   <IconText
                     iconName={"entypo:music"}
                     displayText={"My Music"}
-                    active={screenActive === "Music"}
                   />
                 </Link>
               </div>
@@ -121,12 +133,34 @@ const LoggedInContanier = ({ children,screenActive }) => {
           {/* This is right side */}
           <div className="w-full h-36 bg-gray-950 mt-2 ml-2 mr-2 rounded-8 overflow-auto">
             <div className="w-full h-64 flex items-center justify-end bg-gray-20 bg-opacity-100 rounded-t-8">
-              <div className="w-1/2 flex h-full">
-                <div className="w-3/5 flex justify-around items-center">
-                  <HoverText displayText={"Premium"} />
-                  <HoverText displayText={"Support"} />
-                  <HoverText displayText={"Download"} />
-                  <div className="h-1/2 border-r  border-white"></div>
+              <div className="w-full ml-10 flex h-full">
+                <div className="w-full ml-3 flex text-white justify-start items-center">
+                  <div className="w-full">
+                    <div className={`w-1/2 p-3 text-sm rounded-full bg-gray-30 px-5 flex text-white space-x-3 items-center ${isInputFocused ? "border border-white" : ""
+                      }`} >
+                      <Icon icon="iconoir:search" className="text-2xl" />
+                      <input
+                        type="text"
+                        placeholder="What do you want to listen to?"
+                        className="w-full bg-gray-30 focus:outline-none"
+                        onFocus={() => {
+                          setIsInputFocused(true);
+                        }}
+                        onBlur={() => {
+                          setIsInputFocused(false);
+                        }}
+                        value={searchText}
+                        onChange={(e) => {
+                          setSearchText(e.target.value);
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            searchSong();
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
                 </div>
                 <div className="w-2/5 h-full items-center flex justify-around">
                   <Link to="/UploadSongs">
@@ -138,10 +172,33 @@ const LoggedInContanier = ({ children,screenActive }) => {
                 </div>
               </div>
             </div>
-            <div className="py-2">
-              <div className="px-6">{children}</div>
-            </div>
-          </div>
+            {/* Main Content */}
+          {songData.length > 0 ? (
+            <div className="py-2 space-y-4">
+              <div className="px-6 space-y-8">
+                <div className="text-white">
+                  Showing search results for 
+                  <span className="font-bold"> {searchText}</span>
+                </div>
+                {songData.map((item)=>{
+                    return(
+                      <SingleSongCard
+                      info={item}
+                      playSound={()=>{}}
+                       key={JSON.stringify(item)}
+                       />
+                       )
+                      })
+                    };
+                    </div>
+                    </div>
+                    ):(
+                      <div className="py-4 px-4 text-white">
+                      Nothing To Show Here Please Search
+                      </div>
+                      )
+                      }
+                    </div>
         </div>
         {/* Footer content */}
         {currentSong && (
@@ -152,7 +209,6 @@ const LoggedInContanier = ({ children,screenActive }) => {
                 src={currentSong.thumbnail}
                 alt="Song Thumbnail"
               />
-              {/* Todo Design it response */}
               <div className="pl-4">
                 <div className="text-sm hover:underline cursor-pointer">
                   {currentSong.name}
@@ -192,10 +248,7 @@ const LoggedInContanier = ({ children,screenActive }) => {
                   className="cursor-pointer text-gray hover:text-white"
                 />
               </div>
-               <div className="mt-1 flex justify-center items-center">
-                 <input className="w-13 bg-gray-400" type="range"/>
-                {/* {currentSong.duration} */}
-                </div>
+              <div>Progress bar</div>
             </div>
             <div className="w-1/4 bg-gray-400 flex justify-end">hi</div>
           </div>
@@ -205,4 +258,4 @@ const LoggedInContanier = ({ children,screenActive }) => {
   );
 };
 
-export default LoggedInContanier;
+export default Search

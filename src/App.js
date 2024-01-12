@@ -9,6 +9,7 @@ import LogedHome from "./Componets/LogedHome";
 import UploadSongs from "./Componets/UploadSongs";
 import MyMusic from "./Componets/MyMusic";
 import songContext from "./Context/SongContext";
+import Search from "./Componets/Search";
 
 function App() {
   const [cookie, setCookie] = useCookies(["token"]);
@@ -24,6 +25,7 @@ function App() {
           <Route path="/Home" element={<LogedHome />}></Route>
           <Route path="/UploadSongs" element={<UploadSongs />}></Route>
           <Route path="/MyMusic" element={<MyMusic/>}></Route>
+          <Route path="/Search" element={<Search/>}></Route>
           <Route path="*" element={<Navigate to="/Home" />}></Route>
         </Routes>
           </songContext.Provider>

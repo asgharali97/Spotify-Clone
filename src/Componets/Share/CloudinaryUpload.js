@@ -13,6 +13,7 @@ const CloudinaryUpload = ({setUrl,setName}) => {
                 if (!error && result.event === "success") {
                     setUrl(result.info.secure_url);
                     setName(result.info.original_filename)
+                    console.log(result)
                 } else {
                     if (error) {
                         console.log(error);

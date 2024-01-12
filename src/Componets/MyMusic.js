@@ -16,7 +16,7 @@ const MyMusic = () => {
   }, []);
   return (
     <>
-      <LoggedInContanier>
+      <LoggedInContanier screenActive="Music">
         {songData.map((item) => {
           return <SingleSongCard info={item} playSound={()=>{}} />;
         })}

@@ -9,6 +9,7 @@ const UploadSongs = () => {
   const [name, setName] = useState("");
   const [thumbnail, setThumbnail] = useState("");
   const [playlistUrl, setPlaylistUrl] = useState("");
+  const [track, setTrack] = useState("");
   const [uploadedSongName, setUploadedSongName] = useState("");
   const navigate = useNavigate();
 
