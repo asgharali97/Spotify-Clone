@@ -9,7 +9,7 @@ const MyMusic = () => {
   useEffect(() => {
     const getData = async () => {
       const response = await AuthenticatedGetRequest("/api/song/get/mysongs");
-      console.log(response.data);
+      // console.log(response.data);
       setSongData(response.data);
     };
     getData();

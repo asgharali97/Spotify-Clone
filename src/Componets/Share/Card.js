@@ -12,6 +12,7 @@ const ViewPlaylist = ({ textTitle, cardData }) => {
                 title={item.title}
                 description={item.description}
                 imgUrl={item.imgUrl}
+                key={JSON.stringify(item)}
               />
             )
           })}
@@ -24,7 +25,7 @@ const ViewPlaylist = ({ textTitle, cardData }) => {
 const Card = ({ title, description, imgUrl }) => {
   return (
     <>
-      <div className="w-1/5  p-4 bg-gray-10 bg-opacity-100 rounded-lg">
+      <div className= "w-1/5  p-4 bg-gray-10 bg-opacity-100 rounded-lg">
         <div className="mb-4">
           <img
             className="w-full rounded-md"

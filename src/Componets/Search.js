@@ -74,7 +74,7 @@ const Search = () => {
     const response = await AuthenticatedGetRequest(
       "/api/song/get/name/" + searchText
     );
-    console.log(response)
+    // console.log(response)
     setSongData(response.data);
   };
   return (

@@ -63,7 +63,7 @@ const SpotifyCardData = [
 const LogedHome = () => {
   return (
     <>
-      <LoggedInContanier>
+      <LoggedInContanier screenActive="home">
         <ViewPlaylist textTitle={"Focus"} cardData={focusCardData} />
         <ViewPlaylist
           textTitle={"Spotify Playlist"}

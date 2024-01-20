@@ -5,9 +5,13 @@ import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import { Howl, Howler } from "howler";
 import songContext from "../../Context/SongContext";
+import PlayListModel from "../../model/PlayListModel";
+import AddSongPlaylist from "../../model/AddSongPlaylist";
+import { AutenticatedPostRequest } from "../../Utils/ServerHelper";
 
-
-const LoggedInContanier = ({ children,screenActive }) => {
+const LoggedInContanier = ({ children, screenActive }) => {
+  const [createPlaylistModalOpen, setCreatePlaylistModalOpen] = useState(false);
+  const [addToPlaylistModalOpen, setAddToPlaylistModalOpen] = useState(false);
   const {
     currentSong,
     setCurrentSong,
@@ -28,6 +32,20 @@ const LoggedInContanier = ({ children,screenActive }) => {
     }
     changeSong(currentSong.track);
   }, [currentSong]);
+
+  const addSongToPlaylist = async (playlistId) => {
+    const songId = currentSong._id;
+
+    const payload = {playlistId, songId};
+    const response = await AutenticatedPostRequest(
+        "/api/playlist/add/song",
+        payload
+    );
+    // console.log(response)
+    if(response._id){
+        setAddToPlaylistModalOpen(false)
+    }
+};
 
   const playSound = () => {
     if (!soundPlayed) {
@@ -68,6 +86,21 @@ const LoggedInContanier = ({ children,screenActive }) => {
       <div
         style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
       >
+        {addToPlaylistModalOpen && (
+                <AddSongPlaylist
+                    closeModal={() => {
+                        setAddToPlaylistModalOpen(false);
+                    }}
+                    addSongToPlaylist={addSongToPlaylist}
+                />
+            )}
+        {createPlaylistModalOpen && (
+          <PlayListModel
+            closeModal={() => {
+              setCreatePlaylistModalOpen(false);
+            }}
+          />
+        )}
         <div
           style={{ height: "100vh", flex: "1" }}
           className="h-full w-full flex bg-black "
@@ -96,13 +129,18 @@ const LoggedInContanier = ({ children,screenActive }) => {
                 </div>
               </div>
               <div className="py-3 ml-2 bg-gray-950 h-96 rounded-md cursor-pointer">
+                <Link to="/Library">
                 <IconText
                   iconName={"fluent:library-32-regular"}
                   displayText={"Your Library"}
+                  active={screenActive === "library"}
                 />
+                </Link>
                 <IconText
                   iconName={"material-symbols:add-box"}
                   displayText={"Create Playlist"}
+                  onClick={()=>{setCreatePlaylistModalOpen(true)}}
+                  active={screenActive==="createPlaylis"}
                 />
                 <IconText
                   iconName={"clarity:heart-solid"}
@@ -192,12 +230,26 @@ const LoggedInContanier = ({ children,screenActive }) => {
                   className="cursor-pointer text-gray hover:text-white"
                 />
               </div>
-               <div className="mt-1 flex justify-center items-center">
-                 <input className="w-13 bg-gray-400" type="range"/>
+              <div className="mt-1 flex justify-center items-center">
+                <input className="w-13 bg-gray-400" type="range" />
                 {/* {currentSong.duration} */}
-                </div>
+              </div>
             </div>
-            <div className="w-1/4 bg-gray-400 flex justify-end">hi</div>
+            <div className="w-1/4 flex justify-end pr-4 space-x-4 items-center">
+                        <Icon
+                            icon="ic:round-playlist-add"
+                            fontSize={30}
+                            className="cursor-pointer text-gray-500 hover:text-white"
+                            onClick={() => {
+                                setAddToPlaylistModalOpen(true);
+                            }}
+                        />
+                        <Icon
+                            icon="ph:heart-bold"
+                            fontSize={25}
+                            className="cursor-pointer text-gray-500 hover:text-white"
+                        />
+            </div>
           </div>
         )}
       </div>
