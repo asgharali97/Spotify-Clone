@@ -25,7 +25,7 @@ export const AutenticatedPostRequest = async(route,body)=>{
   return formatResponse;
 
 }
-export const AuthenticatedGetRequest = async(route)=>{
+export const AuthenticatedGetRequest = async(route,body)=>{
   const token= getToken();
   const response = await fetch("http://localhost:4000"+route,{
     method :"GET",
@@ -34,12 +34,12 @@ export const AuthenticatedGetRequest = async(route)=>{
     "Authorization":`Bearer ${token}`
   },
   });
-  const formatResponse = await response.json()
+  const formatResponse = await response.json();
   return formatResponse;
 
 }
 const getToken =()=>{
-  const accessToken =document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/,"$1")
+  const accessToken = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/,"$1")
   return accessToken
   
 }
