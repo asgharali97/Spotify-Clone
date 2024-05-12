@@ -17,7 +17,7 @@ connect();
 
 const opts = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey:"thisisseceret",
+  secretOrKey:"thisisseceret", 
 };
 
 passport.use(new JwtStrategy(opts, async (jwt_payload, done) => {
